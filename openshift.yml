@@ -88,8 +88,6 @@ objects:
     source:
       git:
         uri: ${GIT_SOURCE_URL}
-      binary:
-        asFile: ${APP_NAME}.war
       type: Docker
     strategy:
       dockerStrategy:

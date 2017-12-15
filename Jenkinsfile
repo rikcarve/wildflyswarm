@@ -11,15 +11,15 @@ try {
 		  stage("Checkout") {
 			git url: "${GIT_SOURCE_URL}", branch: "${GIT_SOURCE_REF}"
 		  }
-		  stage("Build WAR") {
+		  stage("Build JAR") {
 			sh "mvn clean package"
-			stash name:"war", includes:"target/${appName}.war"
+			stash name:"jar", includes:"target/${appName}.jar"
 		  }
 		}
 		node {
 		  stage("Build Image") {
-			unstash name:"war"
-			sh "oc start-build ${appName}-docker --from-file=target/${appName}.war -n ${project}"
+			unstash name:"jar"
+			sh "oc start-build ${appName}-docker --from-file=target/${appName}.jar -n ${project}"
 			openshiftVerifyBuild bldCfg: "${appName}-docker", namespace: project, waitTime: '20', waitUnit: 'min'
 		  }
 		  stage("Deploy") {
